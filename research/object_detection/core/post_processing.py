@@ -196,12 +196,12 @@ def multiclass_non_max_suppression(boxes,
                                                   fields.BoxListFields.scores)
     except ValueError:
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print(iou_thresh)
-        print(boxes)
-        print(scores)
-        print(max_size_per_class)
-        print(score_thresh)
-        print(clip_window)
+        print("iou_threshold".format(str(iou_thresh)))
+        print("boxes={}".format(boxes))
+        print("scores={}".format(scores))
+        print("max_size_per_class={}".format(str(max_size_per_class)))
+        print("score_thresh={}".format(str(score_thresh)))
+        print("clip_window={}".format(str(clip_window)))
         print(selected_boxes_list)
         raise ValueError('nooooo sam')
 
