@@ -195,14 +195,14 @@ def multiclass_non_max_suppression(boxes,
         sorted_boxes = box_list_ops.sort_by_field(selected_boxes,
                                                   fields.BoxListFields.scores)
     except ValueError:
-
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print(iou_thresh)
         print(boxes)
         print(scores)
         print(max_size_per_class)
         print(score_thresh)
         print(clip_window)
-        print(selected_boxes)
+        print(selected_boxes_list)
         raise ValueError('nooooo sam')
 
     if clip_window is not None:
