@@ -36,6 +36,8 @@ def multiclass_non_max_suppression(boxes,
                                    pad_to_max_output_size=False,
                                    additional_fields=None,
                                    scope=None):
+
+
   """Multi-class version of non maximum suppression.
 
   This op greedily selects a subset of detection bounding boxes, pruning
@@ -186,9 +188,22 @@ def multiclass_non_max_suppression(boxes,
           fields.BoxListFields.classes, (tf.zeros_like(
               nms_result.get_field(fields.BoxListFields.scores)) + class_idx))
       selected_boxes_list.append(nms_result)
-    selected_boxes = box_list_ops.concatenate(selected_boxes_list)
-    sorted_boxes = box_list_ops.sort_by_field(selected_boxes,
-                                              fields.BoxListFields.scores)
+    try:
+
+        selected_boxes = box_list_ops.concatenate(selected_boxes_list)
+
+        sorted_boxes = box_list_ops.sort_by_field(selected_boxes,
+                                                  fields.BoxListFields.scores)
+    except ValueError:
+        print(selected_boxes)
+        print(iou_thresh)
+        print(boxes)
+        print(scores)
+        print(max_size_per_class)
+        print(score_thresh)
+        print(clip_window)
+        raise ValueError('nooooo sam')
+
     if clip_window is not None:
       # When pad_to_max_output_size is False, it prunes the boxes with zero
       # area.
