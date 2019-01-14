@@ -29,7 +29,6 @@ import tensorflow as tf
 from object_detection import model_hparams
 from object_detection import model_lib
 
-tf.flags.DEFINE_bool('use_tpu', True, 'Use TPUs rather than plain CPUs')
 
 # Cloud TPU Cluster Resolvers
 flags.DEFINE_string(
@@ -43,9 +42,14 @@ flags.DEFINE_string(
     help='GCE zone where the Cloud TPU is located in. If not specified, we '
     'will attempt to automatically detect the GCE project from metadata.')
 flags.DEFINE_string(
-    'tpu_name',
+    'master',
     default=None,
     help='Name of the Cloud TPU for Cluster Resolvers.')
+flags.DEFINE_bool(
+    'use_tpu', default=True,
+    help=('Use TPU to execute the model for training and evaluation. If'
+          ' --use_tpu=false, will use whatever devices are available to'
+          ' TensorFlow by default (e.g. CPU and GPU)'))
 
 flags.DEFINE_integer('num_shards', 8, 'Number of shards (TPU cores).')
 flags.DEFINE_integer('iterations_per_loop', 100,
@@ -86,7 +90,7 @@ def main(unused_argv):
 
   tpu_cluster_resolver = (
       tf.contrib.cluster_resolver.TPUClusterResolver(
-          tpu=[FLAGS.tpu_name],
+          FLAGS.master,
           zone=FLAGS.tpu_zone,
           project=FLAGS.gcp_project))
   tpu_grpc_url = tpu_cluster_resolver.get_master()
