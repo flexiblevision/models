@@ -277,8 +277,26 @@ def create_model_fn(detection_model_fn, configs, hparams, use_tpu=False):
             preprocessed_images,
             features[fields.InputDataFields.true_image_shape])
         for k, v in prediction_dict.items():
-          if v.dtype == tf.bfloat16:
-            prediction_dict[k] = tf.cast(v, tf.float32)
+          
+          v_unpacked = tf.unstack(v)
+          print(tf.shape(v))
+          processed = []
+          modified = False
+          for _v in v_unpacked:
+            if _v.dtype == tf.bfloat16:
+             
+              _v = tf.cast(_v, tf.float32)
+              modified = True
+              print(tf.shape(_v))
+            processed.append(_v)
+          if modified:
+
+            output = tf.concat(processed, 0)
+            print("#")
+            print(tf.shape(v))
+            print(tf.shape(output))
+            print("#")
+            prediction_dict[k] = output
     else:
       prediction_dict = detection_model.predict(
           preprocessed_images,

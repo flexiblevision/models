@@ -115,6 +115,7 @@ def transform_input_data(tensor_dict,
   preprocessed_resized_image, true_image_shape = model_preprocess_fn(
       tf.expand_dims(tf.to_float(image), axis=0))
   if use_bfloat16:
+    print("bfloat")
     preprocessed_resized_image = tf.cast(
         preprocessed_resized_image, tf.bfloat16)
   tensor_dict[fields.InputDataFields.image] = tf.squeeze(
